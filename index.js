@@ -15,6 +15,9 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 const scoreEl = document.querySelector('#scoreEl')
+const startGame = document.querySelector('#startGameBtn')
+const mainButton = document.querySelector('#mainButton')
+const bigScoreEl = document.querySelector('#bigScoreEl')
 
 //Creates the object for the player to interact with the game
 class Player {
@@ -169,7 +172,6 @@ function animate(){
     animationId = requestAnimationFrame(animate)
     canvasContext.fillStyle = 'rgba(0,0,0,0.1)'
     canvasContext.fillRect(0,0,canvas.width, canvas.height)
-    console.log(score)
     player.draw()
 
     particles.forEach((particle, index) => {
@@ -195,8 +197,12 @@ function animate(){
     enemies.forEach((enemy, index) => {
         enemy.update()
         const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+
+        //end game
         if(dist - enemy.radius - player.radius < 1)  { 
                 cancelAnimationFrame(animationId)
+                mainButton.style.display = 'flex'
+                bigScoreEl.innerHTML = score
             }
         projectiles.forEach((projectile, projectileIndex) =>{
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
@@ -243,6 +249,7 @@ function animate(){
 addEventListener('click', 
     (event) => 
     {
+        //creates the bullets when you left click
         const angle = Math.atan2(
             event.clientY - canvas.height / 2, 
             event.clientX - canvas.width / 2
@@ -255,15 +262,18 @@ addEventListener('click',
             new Projectile(
                 canvas.width / 2,
                 canvas.height / 2,
-                4,
+                6,
                 'white',
                 velocity
                 )
         )
-        //creates the bullets when you left click
+        
     }
 )
 
 
-animate()
-spawnEnemies()
+startGame.addEventListener('click', () =>{
+    animate()
+    spawnEnemies()
+    mainButton.style.display = 'none'
+})
