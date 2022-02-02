@@ -20,7 +20,6 @@ class Player {
         //creates the properties and assings the passed values 
         this.x = x 
         this.y = y
-
         this.radius = radius
         this.color = color
     }
@@ -35,12 +34,45 @@ class Player {
     
 }
 
+class Projectile {
+    constructor(x, y, radius, color, velocity){
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+    }
+    draw(){
+        canvasContext.beginPath()
+        canvasContext.arc(this.x,this.y,this.radius,0,Math.PI*2, false)
+        canvasContext.fillStyle = this.color
+        canvasContext.fill()
+    }
+
+}
+
 const middleX = canvas.width / 2
 const middleY = canvas.height / 2
 
 //creates an instance of the object 'player'
 const player = new Player(middleX,middleY, 30, 'red')
 player.draw()
+
+
+//Listens for new events in the eventloop
+addEventListener('click', 
+    (event) => 
+    {
+        const projectile = new Projectile(
+            event.clientX, 
+            event.clientY, 
+            5, 
+            'blue', 
+            null
+        )
+        projectile.draw()
+    }
+)
 
 
 console.log(player)
