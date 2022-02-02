@@ -86,7 +86,7 @@ const middleX = canvas.width / 2
 const middleY = canvas.height / 2
 
 //creates an instance of the object 'player'
-const player = new Player(middleX,middleY, 30, 'red')
+const player = new Player(middleX,middleY, 15, 'white')
 player.draw()
 
 //used to manage different instances of the same object
@@ -110,8 +110,10 @@ function spawnEnemies(){
             x = Math.random() * canvas.width
             y = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
         }
-       
-        const color = 'green'
+        
+
+
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`
         const angle = Math.atan2(
             canvas.height / 2 - y, 
             canvas.width / 2 - x
@@ -128,11 +130,19 @@ function spawnEnemies(){
 let animationId
 function animate(){
     animationId = requestAnimationFrame(animate)
-    canvasContext.clearRect(0,0,canvas.width, canvas.height)
+    canvasContext.fillStyle = 'rgba(0,0,0,0.1)'
+    canvasContext.fillRect(0,0,canvas.width, canvas.height)
+
     player.draw()
 
-    projectiles.forEach((projectile) => {
+    projectiles.forEach((projectile, index) => {
         projectile.update()
+        //remove projectiles when they hit the edge of screen
+        if(projectile.x + projectile.radius < 0 || projectile.x - projectile.radius > canvas.width || projectile.y + projectile.radius < 0 || projectile.y - projectile.radius > canvas.height){
+            setTimeout(() => {
+                projectiles.splice(index, 1)
+            }, 0)
+        }
     })
 
 
@@ -167,16 +177,16 @@ addEventListener('click',
             event.clientY - canvas.height / 2, 
             event.clientX - canvas.width / 2
         )
-        const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
+        const velocity = { //speed of the bullet
+            x: Math.cos(angle) * 5,
+            y: Math.sin(angle) * 5
         }
         projectiles.push(
             new Projectile(
                 canvas.width / 2,
                 canvas.height / 2,
-                2,
-                'blue',
+                4,
+                'white',
                 velocity
                 )
         )
