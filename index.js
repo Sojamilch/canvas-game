@@ -58,6 +58,30 @@ class Projectile {
     }
 }
 
+class Enemy{
+    constructor(x, y, radius, color, velocity){
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+    }
+    //Draws the circle for the enemy
+    draw(){
+        canvasContext.beginPath()
+        canvasContext.arc(this.x,this.y,this.radius,0,Math.PI*2, false)
+        canvasContext.fillStyle = this.color
+        canvasContext.fill()
+    }
+    //Animates the movement of the enemy
+    update(){
+        this.draw()
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+    }
+}
+
+
 const middleX = canvas.width / 2
 const middleY = canvas.height / 2
 
@@ -65,22 +89,41 @@ const middleY = canvas.height / 2
 const player = new Player(middleX,middleY, 30, 'red')
 player.draw()
 
-
-
-const projectile = new Projectile(
-    canvas.width / 2, //Projectile needs to spawn from centre of player
-    canvas.height / 2, 
-    5,
-    'blue', 
-    //this is a nested object (velocities properties)
-    {
-        x: 1,
-        y: 1
-    }
-)
-
 //used to manage different instances of the same object
 const projectiles = []
+const enemies = []
+
+//spawns the enemies and sends them into the player form the edge of the map
+function spawnEnemies(){
+    setInterval(() => {
+
+        // decides the size of the enemies between 30 - 10
+        const radius = Math.random() * (30 - 10) + 10
+        let x 
+        let y
+
+        //uses math to spawn the enemies off screen at a any point
+        if(Math.random() < 0.5){
+            x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
+            y = Math.random() * canvas.height
+            //const y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius 
+        } else {
+            x = Math.random() * canvas.width
+            y = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
+        }
+       
+        const color = 'green'
+        const angle = Math.atan2(
+            canvas.height / 2 - y, 
+            canvas.width / 2 - x
+        )
+        const velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        }
+        enemies.push(new Enemy(x,y,radius,color,velocity))
+    },1000)
+}
 
 //creates a function that updates every frame automatically
 function animate(){
@@ -88,6 +131,7 @@ function animate(){
     canvasContext.clearRect(0,0,canvas.width, canvas.height)
     player.draw()
     projectiles.forEach(projectile => {projectile.update()})
+    enemies.forEach(enemy => {enemy.update()})
 }
 
 //Listens for new events in the eventloop
@@ -111,8 +155,10 @@ addEventListener('click',
                 velocity
                 )
         )
+        //creates the bullets when you left click
     }
 )
 
 
 animate()
+spawnEnemies()
