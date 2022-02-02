@@ -6,3 +6,6 @@ This is a little project following a tutorial to learn
 
 Said tutorial:
 [Chris Courses](https://youtu.be/eI9idPTT0c4)
+
+notes:
+[What is atan2](https://ryankubik.com/blog/atan2)
