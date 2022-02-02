@@ -58,6 +58,38 @@ class Projectile {
     }
 }
 
+//class for partiles when enemies explode 
+const friction = 0.99
+class Particle {
+    constructor(x, y, radius, color, velocity){
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+        this.alpha = 1
+    }
+    //Draws the circle for the bullet
+    draw(){
+        canvasContext.save()
+        canvasContext.globalAlpha = this.alpha
+        canvasContext.beginPath()
+        canvasContext.arc(this.x,this.y,this.radius,0,Math.PI*2, false)
+        canvasContext.fillStyle = this.color
+        canvasContext.fill()
+        canvasContext.restore()
+    }
+    //Animates the movement of the bullet
+    update(){
+        this.draw()
+        this.velocity.x *= friction
+        this.velocity.y *= friction
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+        this.alpha -= 0.01
+    }
+}
+
 class Enemy{
     constructor(x, y, radius, color, velocity){
         this.x = x
@@ -65,6 +97,7 @@ class Enemy{
         this.radius = radius
         this.color = color
         this.velocity = velocity
+        this.alpha = 1
     }
     //Draws the circle for the enemy
     draw(){
@@ -92,6 +125,7 @@ player.draw()
 //used to manage different instances of the same object
 const projectiles = []
 const enemies = []
+const particles = []
 
 //spawns the enemies and sends them into the player form the edge of the map
 function spawnEnemies(){
@@ -135,6 +169,15 @@ function animate(){
 
     player.draw()
 
+    particles.forEach((particle, index) => {
+        if(particle.alpha <= 0){
+            particles.splice(index, 1)
+        } else{
+            particle.update()
+        }
+
+    })
+
     projectiles.forEach((projectile, index) => {
         projectile.update()
         //remove projectiles when they hit the edge of screen
@@ -158,6 +201,11 @@ function animate(){
             //bullet and enemy touch
             if(dist - enemy.radius - projectile.radius < 1)
             {
+                //create explosion
+                for(let i = 0; i < enemy.radius * 2; i++){
+                    particles.push(new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {x:(Math.random() - 0.5) * (Math.random() * 6), y:(Math.random() - 0.5) * (Math.random() * 6)}))
+                }
+                //larger enemies shrink when hit (using GSAP)
                 if(enemy.radius - 10 > 10){
                     gsap.to(enemy,{
                         radius: enemy.radius -10
