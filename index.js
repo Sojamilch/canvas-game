@@ -124,13 +124,25 @@ const middleX = canvas.width / 2
 const middleY = canvas.height / 2
 
 //creates an instance of the object 'player'
-const player = new Player(middleX,middleY, 15, 'white')
+let player = new Player(middleX,middleY, 15, 'white')
 player.draw()
 
 //used to manage different instances of the same object
-const projectiles = []
-const enemies = []
-const particles = []
+let projectiles = []
+let enemies = []
+let particles = []
+
+
+//Resets the game
+function init() {
+    player = new Player(middleX,middleY, 15, 'white')
+    projectiles = []
+    enemies = []
+    particles = []
+    score = 0
+    scoreEl.innerHTML = 0
+    bigScoreEl.innerHTML = 0
+}
 
 //spawns the enemies and sends them into the player form the edge of the map
 function spawnEnemies(){
@@ -271,9 +283,11 @@ addEventListener('click',
     }
 )
 
-
+//Starts/restarts the game
 startGame.addEventListener('click', () =>{
+    init()
     animate()
     spawnEnemies()
+    
     mainButton.style.display = 'none'
 })
