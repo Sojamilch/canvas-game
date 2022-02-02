@@ -5,4 +5,4 @@ This is a little project following a tutorial to learn
  - Html5 Canvas
 
 Said tutorial:
-[Chris Courses](#https://youtu.be/eI9idPTT0c4)
+[Chris Courses](https://youtu.be/eI9idPTT0c4)
