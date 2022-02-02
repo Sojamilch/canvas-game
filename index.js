@@ -174,7 +174,7 @@ function spawnEnemies(){
             y: Math.sin(angle)
         }
         enemies.push(new Enemy(x,y,radius,color,velocity))
-    },650)
+    },800)
 }
 
 //creates a function that updates every frame automatically
