@@ -130,10 +130,31 @@ function animate(){
     requestAnimationFrame(animate)
     canvasContext.clearRect(0,0,canvas.width, canvas.height)
     player.draw()
-    projectiles.forEach(projectile => {projectile.update()})
-    enemies.forEach(enemy => {enemy.update()})
-}
 
+    projectiles.forEach((projectile) => {
+        projectile.update()
+    })
+
+
+    enemies.forEach((enemy, index) => {
+        enemy.update()
+
+        projectiles.forEach((projectile, projectileIndex) =>{
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+
+            //bullet and enemy touch
+            if(dist - enemy.radius - projectile.radius < 1)
+            {
+                setTimeout(() => {
+                    enemies.splice(index, 1)
+                    projectiles.splice(projectileIndex, 1)
+                }, 0)
+            }
+
+        })
+
+    })
+}
 //Listens for new events in the eventloop
 addEventListener('click', 
     (event) => 
