@@ -98,7 +98,7 @@ function spawnEnemies(){
     setInterval(() => {
 
         // decides the size of the enemies between 30 - 10
-        const radius = Math.random() * (30 - 10) + 10
+        const radius = Math.random() * (30 - 5) + 5
         let x 
         let y
 
@@ -112,7 +112,7 @@ function spawnEnemies(){
         }
         
 
-
+        //decides the colour of the enemies to be random
         const color = `hsl(${Math.random() * 360}, 50%, 50%)`
         const angle = Math.atan2(
             canvas.height / 2 - y, 
@@ -158,11 +158,22 @@ function animate(){
             //bullet and enemy touch
             if(dist - enemy.radius - projectile.radius < 1)
             {
-                //stops weird flashing bug
-                setTimeout(() => {
-                    enemies.splice(index, 1)
-                    projectiles.splice(projectileIndex, 1)
-                }, 0)
+                if(enemy.radius - 10 > 10){
+                    gsap.to(enemy,{
+                        radius: enemy.radius -10
+                    })
+                    setTimeout(() => {
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0) 
+                }else{
+                    //stops weird flashing bug
+                    setTimeout(() => {
+                    
+                        enemies.splice(index, 1)
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0) 
+                }
+                
             }
 
         })
