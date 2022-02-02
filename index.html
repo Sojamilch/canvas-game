@@ -1,13 +1,17 @@
 <!-- ensures that the body doesn't get an automatic margin-->
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 <style> 
     body{
         margin: 0;
     }
 </style>
 
-
+<div class="fixed text-white ml-2 mt-2 select-none"><span>Score: </span><span id="scoreEl">0</span></div>
+<!-- Where the game is-->
 <canvas>
 </canvas>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="./index.js"></script>
 <!-- Pulls in the script for use in the html file-->

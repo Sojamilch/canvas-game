@@ -2,6 +2,7 @@
 // selects the canvas element on the html file
 const canvas = document.querySelector('canvas')
 
+
 // Returns a drawing context do add elements too (API)
 const canvasContext = canvas.getContext('2d')
 
@@ -13,6 +14,7 @@ It contains the size of the window in px
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+const scoreEl = document.querySelector('#scoreEl')
 
 //Creates the object for the player to interact with the game
 class Player {
@@ -162,11 +164,12 @@ function spawnEnemies(){
 
 //creates a function that updates every frame automatically
 let animationId
+let score = 0
 function animate(){
     animationId = requestAnimationFrame(animate)
     canvasContext.fillStyle = 'rgba(0,0,0,0.1)'
     canvasContext.fillRect(0,0,canvas.width, canvas.height)
-
+    console.log(score)
     player.draw()
 
     particles.forEach((particle, index) => {
@@ -201,12 +204,17 @@ function animate(){
             //bullet and enemy touch
             if(dist - enemy.radius - projectile.radius < 1)
             {
+                
                 //create explosion
                 for(let i = 0; i < enemy.radius * 2; i++){
                     particles.push(new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {x:(Math.random() - 0.5) * (Math.random() * 6), y:(Math.random() - 0.5) * (Math.random() * 6)}))
                 }
                 //larger enemies shrink when hit (using GSAP)
                 if(enemy.radius - 10 > 10){
+
+                    score += 100
+                    scoreEl.innerHTML = score
+
                     gsap.to(enemy,{
                         radius: enemy.radius -10
                     })
@@ -214,7 +222,10 @@ function animate(){
                         projectiles.splice(projectileIndex, 1)
                     }, 0) 
                 }else{
-                    //stops weird flashing bug
+                    //stops weird flashing bug 
+                    //deletes enemy
+                    score += 250
+                    scoreEl.innerHTML = score
                     setTimeout(() => {
                     
                         enemies.splice(index, 1)
