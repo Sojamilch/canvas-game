@@ -106,7 +106,6 @@ function spawnEnemies(){
         if(Math.random() < 0.5){
             x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
             y = Math.random() * canvas.height
-            //const y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius 
         } else {
             x = Math.random() * canvas.width
             y = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
@@ -126,8 +125,9 @@ function spawnEnemies(){
 }
 
 //creates a function that updates every frame automatically
+let animationId
 function animate(){
-    requestAnimationFrame(animate)
+    animationId = requestAnimationFrame(animate)
     canvasContext.clearRect(0,0,canvas.width, canvas.height)
     player.draw()
 
@@ -138,13 +138,17 @@ function animate(){
 
     enemies.forEach((enemy, index) => {
         enemy.update()
-
+        const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        if(dist - enemy.radius - player.radius < 1)  { 
+                cancelAnimationFrame(animationId)
+            }
         projectiles.forEach((projectile, projectileIndex) =>{
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
 
             //bullet and enemy touch
             if(dist - enemy.radius - projectile.radius < 1)
             {
+                //stops weird flashing bug
                 setTimeout(() => {
                     enemies.splice(index, 1)
                     projectiles.splice(projectileIndex, 1)
