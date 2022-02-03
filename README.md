@@ -9,3 +9,9 @@ Said tutorial:
 
 notes:
 [What is atan2](https://ryankubik.com/blog/atan2)
+
+Features to add:
+ - Difficulty slider
+ - Increasing difficulty over time
+ - Timer
+ - Power-Ups
