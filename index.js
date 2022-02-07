@@ -19,6 +19,7 @@ const startGame = document.querySelector('#startGameBtn')
 const mainButton = document.querySelector('#mainButton')
 const bigScoreEl = document.querySelector('#bigScoreEl')
 const difficultyLabelEL = document.querySelector('#difficultyLabelEl')
+const difficultyLabelOneEl = document.querySelector('#difficultyLabelOneEl')
 
 //Creates the object for the player to interact with the game
 class Player {
@@ -143,13 +144,15 @@ function init() {
     score = 0
     scoreEl.innerHTML = 0
     bigScoreEl.innerHTML = 0
+    difficultyLabelOneEl.innerHTML = difficultyText
 }
 
 //sets the difficulty of the enemies spawning (How fast they spawn 100ms to 1000ms)
 let difficulty = 1000
 document.querySelector('#difficultyEl').oninput = function() {
     difficulty = difficultyEl.value
-    difficultyLabelEL.innerHTML = (difficulty <= 400) ? `Insane ${difficulty} ms` : (difficulty > 400 && difficulty <= 800) ? `Challenging ${difficulty} ms` : (difficulty > 800) ? `Simple ${difficulty} ms` : "???"
+    difficultyText = (difficulty <= 400) ? `Insane ${difficulty} ms` : (difficulty > 400 && difficulty <= 800) ? `Challenging ${difficulty} ms` : (difficulty > 800) ? `Simple ${difficulty} ms` : "???"
+    difficultyLabelEL.innerHTML = difficultyText
 }
 //spawns the enemies and sends them into the player form the edge of the map
 function spawnEnemies(){
