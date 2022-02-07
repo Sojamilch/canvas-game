@@ -150,8 +150,6 @@ let difficulty = 1000
 document.querySelector('#difficultyEl').oninput = function() {
     difficulty = difficultyEl.value
     difficultyLabelEL.innerHTML = (difficulty <= 400) ? `Insane ${difficulty} ms` : (difficulty > 400 && difficulty <= 800) ? `Challenging ${difficulty} ms` : (difficulty > 800) ? `Simple ${difficulty} ms` : "???"
-    console.log(difficulty)
-
 }
 //spawns the enemies and sends them into the player form the edge of the map
 function spawnEnemies(){
